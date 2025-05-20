@@ -9,7 +9,6 @@ import java.time.LocalDate;
 @Entity
 @ToString
 @Getter
-@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,12 +22,31 @@ public class Todo {
     @Column(length = 500, nullable = false)
     private String title;
 
+    private String writer;
+
     private String content;
 
     private boolean complete;
 
     private LocalDate dueDate;
 
+    public void changeTitle(String title) {
+        this.title = title;
+    }
 
+    public void changeWriter(String writer) {
+        this.writer = writer;
+    }
 
+    public void changeContent(String content) {
+        this.content = content;
+    }
+
+    public void changeComplete(boolean complete) {
+        this.complete = complete;
+    }
+
+    public void changeDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
 }

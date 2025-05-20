@@ -83,8 +83,8 @@ public class TodoRepositoryTest {
         Todo saveTodo = todoRepository.save(request);
 
         //when
-        saveTodo.setTitle("제목수정입니다.");
-        saveTodo.setContent("제목내용입니다.");
+        saveTodo.changeTitle("제목수정입니다.");
+        saveTodo.changeContent("제목내용입니다.");
         todoRepository.save(saveTodo);
 
         Optional<Todo> result = todoRepository.findById(saveTodo.getTno());
