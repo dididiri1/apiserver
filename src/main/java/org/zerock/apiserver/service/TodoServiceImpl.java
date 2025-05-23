@@ -48,9 +48,9 @@ public class TodoServiceImpl implements TodoService {
         Optional<Todo> result = todoRepository.findById(todoDto.getTno());
 
         Todo todo = result.orElseThrow();
-        todo.changeTitle(todo.getTitle());
-        todo.changeDueDate(todo.getDueDate());
-        todo.changeComplete(todo.isComplete());
+        todo.changeTitle(todoDto.getTitle());
+        todo.changeDueDate(todoDto.getDueDate());
+        todo.changeComplete(todoDto.isComplete());
 
         todoRepository.save(todo);
     }
