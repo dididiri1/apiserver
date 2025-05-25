@@ -17,6 +17,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+org:
+  zerock:
+    upload:
+      path: upload
 
 ---
 spring:
