@@ -1,4 +1,4 @@
-package org.zerock.apiserver.contoller.formatter;
+package org.zerock.apiserver.controller.formatter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

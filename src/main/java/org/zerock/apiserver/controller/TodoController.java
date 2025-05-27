@@ -1,4 +1,4 @@
-package org.zerock.apiserver.contoller;
+package org.zerock.apiserver.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
