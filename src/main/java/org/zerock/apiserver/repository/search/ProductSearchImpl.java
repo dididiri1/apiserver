@@ -45,7 +45,7 @@ public class ProductSearchImpl extends QuerydslRepositorySupport implements Prod
 
         List<Tuple> productList = query.select(product, productImage).fetch();
 
-        long count =query.fetchCount();
+        long count = query.fetchCount();
 
         System.out.println(productList);
         System.out.println(count);

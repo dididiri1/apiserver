@@ -16,6 +16,7 @@ import org.zerock.apiserver.dto.ProductDto;
 import org.zerock.apiserver.repository.ProductRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,11 +31,7 @@ public class ProductServiceImpl implements ProductService {
     public PageResponseDto<ProductDto> getList(PageRequestDto pageRequestDTO) {
         log.info("getList..............");
 
-        Pageable pageable = PageRequest.of(
-                pageRequestDTO.getPage() - 1,
-                pageRequestDTO.getSize(),
-                Sort.by("pno").descending()
-        );
+        Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), Sort.by("pno").descending());
 
         Page<Object[]> result = productRepository.selectList(pageable);
 
@@ -42,19 +39,90 @@ public class ProductServiceImpl implements ProductService {
             Product product = (Product) arr[0];
             ProductImage productImage = (ProductImage) arr[1];
 
-            ProductDto productDTO = ProductDto.builder()
-                    .pno(product.getPno())
-                    .pname(product.getPname())
-                    .pdesc(product.getPdesc())
-                    .price(product.getPrice())
-                    .build();
+            ProductDto productDTO = ProductDto.builder().pno(product.getPno()).pname(product.getPname()).pdesc(product.getPdesc()).price(product.getPrice()).build();
 
             String imageStr = productImage.getFileName();
-            productDTO.setUploadFileNames(List.of(imageStr)); // Java 9 이상
+            productDTO.setUploadFileNames(List.of(imageStr));
 
             return productDTO;
         }).collect(Collectors.toList());
 
-        return null;
+        long totalCount = result.getTotalElements();
+
+        return PageResponseDto.<ProductDto>withAll().dtoList(dtoList).totalCount(totalCount).pageRequestDto(pageRequestDTO).build();
+    }
+
+    @Override
+    public Long register(ProductDto productDto) {
+        Product product = dtoToEntity(productDto);
+
+        Product result = productRepository.save(product);
+
+        return result.getPno();
+    }
+
+    @Override
+    public ProductDto get(Long pno) {
+        java.util.Optional<Product> result = productRepository.selectOne(pno);
+        Product product = result.orElseThrow();
+        ProductDto productDTO = entityToDTO(product);
+        return productDTO;
+    }
+
+    @Override
+    public void modify(ProductDto productDto) {
+        Optional<Product> result = productRepository.findById(productDto.getPno());
+
+        Product product = result.orElseThrow();
+
+        product.changeName(productDto.getPname());
+        product.changeDesc(productDto.getPdesc());
+        product.changePrice(productDto.getPrice());
+
+        product.clearList();
+
+        List<String> uploadFileNames = productDto.getUploadFileNames();
+
+        if (uploadFileNames != null && uploadFileNames.size() > 0) {
+            uploadFileNames.stream().forEach(uploadName -> {
+                product.addImageString(uploadName);
+            });
+        }
+        productRepository.save(product);
+    }
+
+    @Override
+    public void remove(Long pno) {
+        productRepository.updateToDelete(pno, true);
+    }
+
+    private ProductDto entityToDTO(Product product) {
+
+        ProductDto productDto = ProductDto.builder().pno(product.getPno()).pname(product.getPname()).pdesc(product.getPdesc()).price(product.getPrice()).delFlag(product.isDelFlag()).build();
+
+        List<ProductImage> imageList = product.getImageList();
+
+        if (imageList == null || imageList.size() == 0) {
+            return productDto;
+        }
+
+        List<String> fileNameList = imageList.stream().map(productImage -> productImage.getFileName()).toList();
+
+        productDto.setUploadFileNames(fileNameList);
+
+        return productDto;
+    }
+
+    private Product dtoToEntity(ProductDto productDto) {
+        Product product = Product.builder().pno(productDto.getPno()).pname(productDto.getPname()).pdesc(productDto.getPdesc()).price(productDto.getPrice()).build();
+
+        List<String> uploadFileNames = productDto.getUploadFileNames();
+        if (uploadFileNames == null) {
+            return product;
+        }
+        uploadFileNames.stream().forEach(uploadName -> {
+            product.addImageString(uploadName);
+        });
+        return product;
     }
 }
