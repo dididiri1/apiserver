@@ -52,6 +52,9 @@ dependencies {
 
     implementation 'net.coobird:thumbnailator:0.4.19'
 
+    testCompileOnly 'org.projectlombok:lombok:1.18.32'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
+
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
     annotationProcessor(
             "jakarta.persistence:jakarta.persistence-api",
