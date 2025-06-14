@@ -1,11 +1,14 @@
 package org.zerock.apiserver.service;
 
 
+import org.springframework.transaction.annotation.Transactional;
 import org.zerock.apiserver.domain.Member;
 import org.zerock.apiserver.dto.MemberDTO;
+import org.zerock.apiserver.dto.MemberModifyDTO;
 
 import java.util.stream.Collectors;
 
+@Transactional
 public interface MemberService {
 
     MemberDTO getKaKaoMember(String accessToken);
@@ -25,4 +28,6 @@ public interface MemberService {
 
         return dto;
     }
+
+    void modifyMember(MemberModifyDTO memberModifyDTO);
 }
