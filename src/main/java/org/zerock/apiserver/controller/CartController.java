@@ -42,7 +42,7 @@ public class CartController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @DeleteMapping("/{cino")
+    @DeleteMapping("/{cino}")
     private List<CartItemListDTO> removeFromCart(@PathVariable("cino") Long cino) {
 
         return cartService.remove(cino);
