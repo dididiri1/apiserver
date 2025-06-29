@@ -37,8 +37,7 @@ public class MemberDTO extends User {
         dataMap.put("pw",pw);
         dataMap.put("nickname", nickname);
         dataMap.put("social", social);
-        dataMap.put("roleNames"
-                , roleNames);
+        dataMap.put("roleNames", roleNames);
         return dataMap;
     }
 }

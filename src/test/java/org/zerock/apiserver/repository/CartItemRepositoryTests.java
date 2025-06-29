@@ -28,8 +28,8 @@ class CartItemRepositoryTests {
 
     @Test
     public void testInsertByProduct() throws Exception {
-        String email = "user1@aaa.com";
-        Long pno = 5L;
+        String email = "user0@aaa.com";
+        Long pno = 1L;
         int qty = 1;
 
         //이메일 상품번호로 장바구니 아이템 확인 없으면 추가 있으면 수량 변경 저장

@@ -52,6 +52,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         log.info(" -----------------JWTCheckFilter.................");
         String authHeaderStr = request.getHeader("Authorization");
+        System.out.printf(authHeaderStr);
         try {
             String accessToken = authHeaderStr.substring(7);
             Map<String, Object> claims = JWTUtil.validateToken(accessToken);
@@ -64,8 +65,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             Boolean social = (Boolean) claims.get("social");
             List<String> roleNames = (List<String>) claims.get("roleNames");
 
-            MemberDTO memberDTO = new MemberDTO(email, pw, nickname, social.booleanValue(),
-                    roleNames);
+            MemberDTO memberDTO = new MemberDTO(email, pw, nickname, social.booleanValue(), roleNames);
             log.info("---------------------------------");
             log.info(memberDTO);
             log.info(memberDTO.getAuthorities());
